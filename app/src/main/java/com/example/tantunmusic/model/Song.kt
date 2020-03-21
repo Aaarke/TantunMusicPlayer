@@ -1,7 +1,6 @@
 package com.example.tantunmusic.model
 
-class Song {
-//    private val id: Long = 0
-//    private val title: String? = null
-//    private val artist: String? = null
-}
+data class Song (var title:String?=null,
+                 var author:String?=null,
+                 var songUrl:String?=null,
+                 var albumID:Long?=null)

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TantunMusic</string>
+    <string name="now_playing">Now Playing:</string>
+    <string name="textview">TextView</string>
+    <string name="_0_min_0_sec">0 min, 0 sec</string>
+    <string name="song_semo">Baaki Baatein peene Baad</string>
 </resources>

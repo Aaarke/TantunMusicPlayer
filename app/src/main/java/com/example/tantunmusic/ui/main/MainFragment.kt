@@ -3,7 +3,6 @@ package com.example.tantunmusic.ui.main
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,7 @@ import com.example.tantunmusic.utility.RequestCode
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.details_slide_bar.*
 import kotlinx.android.synthetic.main.main_fragment.*
-import java.util.ArrayList
+import java.util.*
 
 
 class MainFragment : Fragment() {
@@ -35,9 +34,8 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private var varsInitialized: Boolean = false
     var relativeParams: RelativeLayout.LayoutParams? = null
-    private lateinit var mLayoutManager:RecyclerView.LayoutManager
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var songsAdapter: SongsAdapter
-
 
 
     override fun onCreateView(
@@ -51,23 +49,30 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         checkPermissions()
-
-
     }
 
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(context!!, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.REQUEST_CODE_ASK_PERMISSIONS)
+            if (ActivityCompat.checkSelfPermission(
+                    context!!,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    RequestCode.REQUEST_CODE_ASK_PERMISSIONS
+                )
                 return
+            }else{
+                loadMusicFromLocal()
             }
         }
 
     }
 
     private fun setAdapter() {
-        mLayoutManager= LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        rvSongs.layoutManager=mLayoutManager
+        mLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        rvSongs.layoutManager = mLayoutManager
         songsAdapter = SongsAdapter(context!!, ArrayList())
         rvSongs.adapter = songsAdapter
     }
@@ -83,12 +88,16 @@ class MainFragment : Fragment() {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             RequestCode.REQUEST_CODE_ASK_PERMISSIONS -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loadMusicFromLocal()
             } else {
-                Toast.makeText(context!!,"Denial",Toast.LENGTH_LONG)
+                Toast.makeText(context!!, "Denial", Toast.LENGTH_LONG)
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
@@ -122,14 +131,29 @@ class MainFragment : Fragment() {
                 previousState: SlidingUpPanelLayout.PanelState?,
                 newState: SlidingUpPanelLayout.PanelState?
             ) {
+                when(newState){
+                    SlidingUpPanelLayout.PanelState.EXPANDED->{
+                        ivArtworkBar.visibility=View.VISIBLE
+
+                    }
+                    SlidingUpPanelLayout.PanelState.COLLAPSED->{
+                        ivArtworkBar.visibility=View.GONE
+                    }
+                    SlidingUpPanelLayout.PanelState.ANCHORED->{
+
+                    }
+                    SlidingUpPanelLayout.PanelState.DRAGGING->{
+                        ivArtworkBar.visibility=View.GONE
+                    }
+
+
+                }
             }
 
             override fun onPanelClosed(panel: View) {
-
             }
 
             override fun onPanelOpened(panel: View) {
-
             }
 
         })

@@ -6,4 +6,5 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="holo_blue_light">#8080</color>
+    <color name="colorWhite">#C4FAF7</color>
 </resources>
